@@ -1,0 +1,21 @@
+--- CMakeLists.txt.old	2020-08-19 11:19:20.725500054 +0100
++++ CMakeLists.txt	2020-08-19 11:20:29.630190590 +0100
+@@ -64,12 +64,12 @@
+ 
+ # For CGAL versions < 4.3, we add a local directory that contains some tweaked include files from unreleased versions
+ # They will overwrite files from the CGAL installation
+-if( "${CGAL_VERSION}" VERSION_LESS "4.3" )
+-  include_directories( patches/CGAL-4.2 )
+-elseif( "${CGAL_VERSION}" VERSION_LESS "4.10")
+-  include_directories( patches/CGAL-4.3 )
+-  add_definitions( "-DCGAL_INTERSECTION_VERSION=1" )
+-endif()
++# if( "${CGAL_VERSION}" VERSION_LESS "4.3" )
++#   include_directories( patches/CGAL-4.2 )
++# elseif( "${CGAL_VERSION}" VERSION_LESS "4.10")
++#   include_directories( patches/CGAL-4.3 )
++#   add_definitions( "-DCGAL_INTERSECTION_VERSION=1" )
++# endif()
+ 
+ #-- BOOST --------------------------------------------------
+ option( Boost_USE_AUTO_LINK "boost use autolink" OFF )
