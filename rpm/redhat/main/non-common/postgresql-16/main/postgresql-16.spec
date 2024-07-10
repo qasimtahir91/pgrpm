@@ -65,13 +65,12 @@ Release:	3PGDG%{?dist}
 License:	PostgreSQL
 Url:		https://www.postgresql.org/
 
-Source0:	https://download.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
+Source0:	postgresql-16.3.zip
 Source4:	%{sname}-%{pgmajorversion}-Makefile.regress
 Source5:	%{sname}-%{pgmajorversion}-pg_config.h
 Source6:	%{sname}-%{pgmajorversion}-README-systemd.rpm-dist
 Source7:	%{sname}-%{pgmajorversion}-ecpg_config.h
 Source9:	%{sname}-%{pgmajorversion}-libs.conf
-Source12:	https://www.postgresql.org/files/documentation/pdf/%{pgpackageversion}/%{sname}-%{pgpackageversion}-A4.pdf
 %if 0%{?suse_version}
 Source14:	%{sname}-%{pgmajorversion}.pam.suse
 %else
@@ -463,7 +462,7 @@ benchmarks.
 %patch -P 5 -p0
 %patch -P 6 -p0
 
-%{__cp} -p %{SOURCE12} .
+#%{__cp} -p %{SOURCE12} .
 
 %build
 
@@ -730,9 +729,7 @@ touch -r %{SOURCE10} %{sname}-%{pgmajorversion}-check-db-dir
 # gzip doc/internals.ps
 %{__cp} %{SOURCE6} README.rpm-dist
 %{__mkdir} -p %{buildroot}%{pgbaseinstdir}/share/doc/html
-%{__mv} doc/src/sgml/html doc
 %{__mkdir} -p %{buildroot}%{pgbaseinstdir}/share/man/
-%{__mv} doc/src/sgml/man1 doc/src/sgml/man3 doc/src/sgml/man7 %{buildroot}%{pgbaseinstdir}/share/man/
 %{__rm} -rf %{buildroot}%{_docdir}/pgsql
 
 # These file(s) should not be packaged:
@@ -939,30 +936,11 @@ fi
 %{pgbaseinstdir}/bin/reindexdb
 %{pgbaseinstdir}/bin/vacuumdb
 %{pgbaseinstdir}/share/errcodes.txt
-%{pgbaseinstdir}/share/man/man1/clusterdb.*
-%{pgbaseinstdir}/share/man/man1/createdb.*
-%{pgbaseinstdir}/share/man/man1/createuser.*
-%{pgbaseinstdir}/share/man/man1/dropdb.*
-%{pgbaseinstdir}/share/man/man1/dropuser.*
-%{pgbaseinstdir}/share/man/man1/pgbench.1
-%{pgbaseinstdir}/share/man/man1/pg_basebackup.*
-%{pgbaseinstdir}/share/man/man1/pg_config.*
-%{pgbaseinstdir}/share/man/man1/pg_dump.*
-%{pgbaseinstdir}/share/man/man1/pg_dumpall.*
-%{pgbaseinstdir}/share/man/man1/pg_isready.*
-%{pgbaseinstdir}/share/man/man1/pg_restore.*
-%{pgbaseinstdir}/share/man/man1/psql.*
-%{pgbaseinstdir}/share/man/man1/reindexdb.*
-%{pgbaseinstdir}/share/man/man1/vacuumdb.*
-%{pgbaseinstdir}/share/man/man3/*
-%{pgbaseinstdir}/share/man/man7/*
 
 %files docs
 %defattr(-,root,root)
 %doc doc/src/*
-%doc *-A4.pdf
 %doc src/tutorial
-%doc doc/html
 
 %files contrib -f pg_contrib.lst
 %defattr(-,root,root)
@@ -1098,10 +1076,6 @@ fi
 %{pgbaseinstdir}/bin/pg_amcheck
 %{pgbaseinstdir}/bin/pg_recvlogical
 %{pgbaseinstdir}/bin/vacuumlo
-%{pgbaseinstdir}/share/man/man1/pg_amcheck.1
-%{pgbaseinstdir}/share/man/man1/oid2name.1
-%{pgbaseinstdir}/share/man/man1/pg_recvlogical.1
-%{pgbaseinstdir}/share/man/man1/vacuumlo.1
 
 %files libs -f pg_libpq5.lst
 %defattr(-,root,root)
@@ -1135,21 +1109,6 @@ fi
 %{pgbaseinstdir}/bin/pg_upgrade
 %{pgbaseinstdir}/bin/pg_verifybackup
 %{pgbaseinstdir}/bin/postgres
-%{pgbaseinstdir}/share/fix-CVE-2024-4317.sql
-%{pgbaseinstdir}/share/man/man1/initdb.*
-%{pgbaseinstdir}/share/man/man1/pg_archivecleanup.1
-%{pgbaseinstdir}/share/man/man1/pg_checksums.*
-%{pgbaseinstdir}/share/man/man1/pg_controldata.*
-%{pgbaseinstdir}/share/man/man1/pg_ctl.*
-%{pgbaseinstdir}/share/man/man1/pg_resetwal.*
-%{pgbaseinstdir}/share/man/man1/pg_receivewal.*
-%{pgbaseinstdir}/share/man/man1/pg_rewind.1
-%{pgbaseinstdir}/share/man/man1/pg_test_fsync.1
-%{pgbaseinstdir}/share/man/man1/pg_test_timing.1
-%{pgbaseinstdir}/share/man/man1/pg_upgrade.1
-%{pgbaseinstdir}/share/man/man1/pg_verifybackup.*
-%{pgbaseinstdir}/share/man/man1/pg_waldump.1
-%{pgbaseinstdir}/share/man/man1/postgres.*
 %{pgbaseinstdir}/share/postgres.bki
 %{pgbaseinstdir}/share/system_constraints.sql
 %{pgbaseinstdir}/share/system_functions.sql
@@ -1201,7 +1160,6 @@ fi
 %{pgbaseinstdir}/lib/libpgtypes.a
 %{pgbaseinstdir}/lib/pgxs/*
 %{pgbaseinstdir}/lib/pkgconfig/*
-%{pgbaseinstdir}/share/man/man1/ecpg.*
 
 %if %llvm
 %files llvmjit
@@ -1242,6 +1200,9 @@ fi
 %endif
 
 %changelog
+* Wed Jul 10 2024 Qasim Tahir <qasim.m@bitnine.net> - 16.3.0-1
+- Initial release for AgensSQL 16.3.0-1
+
 * Thu May 23 2024 Devrim Gündüz <devrim@gunduz.org> - 16.3-3PGDG
 - Rebuild against LLVM 17 on RHEL 8
 
