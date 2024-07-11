@@ -21,38 +21,32 @@ jobs:
     - name: Update changelog in SPEC file
       run: |
         current_date=$(date +"%a %b %d %Y")
-        spec_file="${{ github.workspace }}/rpm/redhat/main/non-common/postgresql-16/main/postgresql-16.spec"
-        if [ ! -f "$spec_file" ]; then
-          echo "SPEC file not found: $spec_file"
-          exit 1
-        fi
-        sed -i "s/\*.*Qasim Tahir <qasim.m@bitnine.net> - 16.3.0-1/\* $current_date Qasim Tahir <qasim.m@bitnine.net> - 16.3.0-1/g" "$spec_file"
+        spec_file="pgrpm/rpm/redhat/main/non-common/postgresql-16/main/postgresql-16.spec"
+        sed -i "s/\*.*Qasim Tahir <qasim.m@bitnine.net> - 16.3.0-1/\* $current_date Qasim Tahir <qasim.m@bitnine.net> - 16.3.0-1/g" $spec_file
         echo "Date in the %changelog section has been updated to: $current_date"
 
     - name: Navigate to EL-8 directory
-      run: cd ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8
+      run: cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
 
     - name: Remove old Agens Repo code/zip
       run: |
-        rm -rf ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
-        rm -rf ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3.zip
+        rm -rf pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
+        rm -rf pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3.zip
 
     - name: Clone PostgreSQL Repository into EL-8 directory
-      run: git clone https://github.com/qasimtahir91/postgresql-16.3.git ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
+      run: git clone https://github.com/qasimtahir91/postgresql-16.3.git pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
 
     - name: Create ZIP archive
       run: |
-        cd ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8
+        cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
         chmod +x postgresql-16.3/configure
         zip -r postgresql-16.3.zip postgresql-16.3
 
     - name: Remove old directories
-      run: rm -rf ${{ github.workspace }}/rpm16/ ${{ github.workspace }}/rpmbuild/
+      run: rm -rf ~/rpm16/ ~/rpmbuild/
 
     - name: Build the RPM
-      run: |
-        cd ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8
-        make build16
+      run: make -C pgrpm/rpm/redhat/16/postgresql-16/EL-8 build16
 
     - name: Notify build completion
       run: echo "Build Created ... DONE !!"
