@@ -41,13 +41,15 @@ jobs:
       run: |
         cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
         chmod +x postgresql-16.3/configure
-        zip -r postgresql-16.3.zip postgresql-16.3
+        zip -r pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3.zip pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
 
     - name: Remove old directories
       run: rm -rf ~/rpm16/ ~/rpmbuild/
 
     - name: Build the RPM
-      run: make -C pgrpm/rpm/redhat/16/postgresql-16/EL-8 build16
+      run: |
+        cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
+        make build16
 
     - name: Notify build completion
       run: echo "Build Created ... DONE !!"
