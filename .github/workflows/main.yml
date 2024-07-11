@@ -21,7 +21,7 @@ jobs:
     - name: Update changelog in SPEC file
       run: |
         current_date=$(date +"%a %b %d %Y")
-        spec_file="${{ github.workspace }}/pgrpm/rpm/redhat/main/non-common/postgresql-16/main/postgresql-16.spec"
+        spec_file="${{ github.workspace }}/rpm/redhat/main/non-common/postgresql-16/main/postgresql-16.spec"
         if [ ! -f "$spec_file" ]; then
           echo "SPEC file not found: $spec_file"
           exit 1
@@ -30,19 +30,19 @@ jobs:
         echo "Date in the %changelog section has been updated to: $current_date"
 
     - name: Navigate to EL-8 directory
-      run: cd ${{ github.workspace }}/pgrpm/rpm/redhat/16/postgresql-16/EL-8
+      run: cd ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8
 
     - name: Remove old Agens Repo code/zip
       run: |
-        rm -rf ${{ github.workspace }}/pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
-        rm -rf ${{ github.workspace }}/pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3.zip
+        rm -rf ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
+        rm -rf ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3.zip
 
     - name: Clone PostgreSQL Repository into EL-8 directory
-      run: git clone https://github.com/qasimtahir91/postgresql-16.3.git ${{ github.workspace }}/pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
+      run: git clone https://github.com/qasimtahir91/postgresql-16.3.git ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
 
     - name: Create ZIP archive
       run: |
-        cd ${{ github.workspace }}/pgrpm/rpm/redhat/16/postgresql-16/EL-8
+        cd ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8
         chmod +x postgresql-16.3/configure
         zip -r postgresql-16.3.zip postgresql-16.3
 
@@ -51,7 +51,7 @@ jobs:
 
     - name: Build the RPM
       run: |
-        cd ${{ github.workspace }}/pgrpm/rpm/redhat/16/postgresql-16/EL-8
+        cd ${{ github.workspace }}/rpm/redhat/16/postgresql-16/EL-8
         make build16
 
     - name: Notify build completion
