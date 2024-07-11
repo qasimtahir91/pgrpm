@@ -26,20 +26,17 @@ jobs:
         sed -i "s/\*.*Qasim Tahir <qasim.m@bitnine.net> - 16.3.0-1/\* $current_date Qasim Tahir <qasim.m@bitnine.net> - 16.3.0-1/g" $spec_file
         echo "Date in the %changelog section has been updated to: $current_date"
 
-    - name: Navigate to EL-8 directory
-      run: cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
-
     - name: Remove old Agens Repo code/zip
       run: |
-        rm -rf pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
-        rm -rf pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3.zip
+        cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
+        rm -rf postgresql-16.3
+        rm -rf postgresql-16.3.zip
 
     - name: Clone PostgreSQL Repository into EL-8 directory
-      run: git clone https://github.com/qasimtahir91/postgresql-16.3.git pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
+      run: git clone https://github.com/qasimtahir91/postgresql-16.3.git
 
     - name: Create ZIP archive
       run: |
-        cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
         chmod +x postgresql-16.3/configure
         zip -r pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3.zip pgrpm/rpm/redhat/16/postgresql-16/EL-8/postgresql-16.3
 
@@ -48,7 +45,6 @@ jobs:
 
     - name: Build the RPM
       run: |
-        cd pgrpm/rpm/redhat/16/postgresql-16/EL-8
         make build16
 
     - name: Notify build completion
